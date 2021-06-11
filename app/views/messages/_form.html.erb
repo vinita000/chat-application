@@ -1,0 +1,47 @@
+<%= form_with(model: message, local: true) do |form| %>
+  <% if message.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(message.errors.count, "error") %> prohibited this message from being saved:</h2>
+
+      <ul>
+        <% message.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <%= form.hidden_field :room_id, value: @room.id %>
+
+
+  <div class="input-group">
+    <%= form.text_area :content, placeholder: "Type your message here....", class: "form-control" %>
+    <div class="input-group-append">
+      <%= form.submit "Add Message", class: "btn btn-primary", data: { disable_with: false }, onclick: "addContent()" %>
+    </div>
+  </div>
+
+
+<% end %>
+
+
+<script>
+  var element = document.getElementsByClassName("chat-room");
+  element[0].scrollTop = element[0].scrollHeight;
+  function addContent(){   
+    var txt = document.getElementById("message_content").value;
+    var myDiv = document.getElementById("messages");
+    console.log(txt);
+    html = "<div class=\"message mb-2 me\">\n  <div class=\"content-container\">\n    <div class=\"content\">\n " +txt+"\n    </div>\n    <div class=\"author\">\n      <%=current_user.username%>\n    </div>\n  </div>\n</div>"
+    const messageContent = document.getElementById("messages")
+    messageContent.innerHTML = messageContent.innerHTML + html
+    setTimeout(clearText, 1000);
+    var element = document.getElementsByClassName("chat-room");
+    element[0].scrollTop = element[0].scrollHeight;
+  }
+  function clearText(){
+    document.getElementById("message_content").value = ""
+  }
+
+</script>
